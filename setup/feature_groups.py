@@ -7,9 +7,9 @@ import hopsworks
 project = hopsworks.login(
     host='10.87.43.126',
     port=443,
-    project='test',
+    project='flink_v1',
     engine='python', # spark-no-metastore
-    api_key_value='Q4ilDVggoRQyvj3O.sHnWx1SltUELcsO7q6bgbW12RGUaX6FPOFNty8Aj2IP8SDuGEHfOMJPscg99ElUr',
+    api_key_value='MSHiV6jSucZ9wscg.oGAUiQv2gEm2ZiEA5lzSa7R2ZrOvav2oqHS8YgSVOjFxCx4DKZU6vaQ8Diix7vEK',
     hostname_verification=False,
 )
 

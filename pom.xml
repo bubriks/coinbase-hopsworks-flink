@@ -16,7 +16,7 @@
         <asynchttp.version>2.12.3</asynchttp.version>
         <junit.version>4.13.2</junit.version>
         <avro.version>1.8.2</avro.version>
-        <flink.version>2.0.0</flink.version>
+        <flink.version>1.17.1.0</flink.version>
     </properties>
 
     <dependencies>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-kafka</artifactId>
-            <version>4.0.0-2.0</version>
+            <version>${flink.version}</version>
         </dependency>
 
         <dependency>

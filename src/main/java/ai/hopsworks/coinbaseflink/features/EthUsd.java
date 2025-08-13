@@ -1,16 +1,20 @@
 package ai.hopsworks.coinbaseflink.features;
 
-import ai.hopsworks.coinbaseflink.utils.Ticker;
-import ai.hopsworks.coinbaseflink.utils.WSReader;
-import com.logicalclocks.hsfs.flink.FeatureStore;
-import com.logicalclocks.hsfs.flink.HopsworksConnection;
+import java.time.Duration;
+
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 
-import java.time.Duration;
+import com.logicalclocks.hsfs.flink.FeatureStore;
+import com.logicalclocks.hsfs.flink.HopsworksConnection;
+
+import ai.hopsworks.coinbaseflink.utils.Ticker;
+import ai.hopsworks.coinbaseflink.utils.WSReader;
+import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 
 public class EthUsd {
 
@@ -23,8 +27,8 @@ public class EthUsd {
     HopsworksConnection hopsworksConnection = HopsworksConnection.builder()
         .host("10.87.43.126")
         .port(443)
-        .project("test")
-        .apiKeyValue("Q4ilDVggoRQyvj3O.sHnWx1SltUELcsO7q6bgbW12RGUaX6FPOFNty8Aj2IP8SDuGEHfOMJPscg99ElUr")
+        .project("flink_v1")
+        .apiKeyValue("MSHiV6jSucZ9wscg.oGAUiQv2gEm2ZiEA5lzSa7R2ZrOvav2oqHS8YgSVOjFxCx4DKZU6vaQ8Diix7vEK")
         .build();
 
     featureStore = hopsworksConnection.getFeatureStore();
@@ -43,6 +47,7 @@ public class EthUsd {
 
     env.execute(JOB_NAME);
     env.enableCheckpointing(CHECKPOINTING_INTERVAL_MS);
+    env.setRestartStrategy(RestartStrategies.noRestart());
   }
 
   private void priceSlidingWindow(DataStreamSource<Ticker> websocketSource,
@@ -58,7 +63,7 @@ public class EthUsd {
     DataStream<PriceAgg> websocketStream = websocketSource
         .assignTimestampsAndWatermarks(customWatermark)
         .keyBy(Ticker::getTicker)
-        .window(SlidingEventTimeWindows.of(Duration.ofMinutes(windowSizeMinutes), Duration.ofMinutes(slideSizeMinutes)))
+        .window(SlidingEventTimeWindows.of(Time.minutes(windowSizeMinutes), Time.minutes(slideSizeMinutes)))
         .aggregate(new PriceAccumulator(), new PriceWindow());
 
     featureStore
