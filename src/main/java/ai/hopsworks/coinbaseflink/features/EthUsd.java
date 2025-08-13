@@ -23,8 +23,8 @@ public class EthUsd {
     HopsworksConnection hopsworksConnection = HopsworksConnection.builder()
         .host("10.87.43.126")
         .port(443)
-        .project("test")
-        .apiKeyValue("Q4ilDVggoRQyvj3O.sHnWx1SltUELcsO7q6bgbW12RGUaX6FPOFNty8Aj2IP8SDuGEHfOMJPscg99ElUr")
+        .project("flink_v2")
+        .apiKeyValue("MSHiV6jSucZ9wscg.oGAUiQv2gEm2ZiEA5lzSa7R2ZrOvav2oqHS8YgSVOjFxCx4DKZU6vaQ8Diix7vEK")
         .build();
 
     featureStore = hopsworksConnection.getFeatureStore();
